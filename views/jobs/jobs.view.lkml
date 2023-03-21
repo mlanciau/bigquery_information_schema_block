@@ -9,8 +9,7 @@ view: jobs {
     sql:
       SELECT *
       FROM `region-@{REGION}.INFORMATION_SCHEMA.JOBS_BY_@{SCOPE}`
-      WHERE creation_time >= {% date_start date.date_filter%}
-        AND creation_time < {% date_end date.date_filter%}
+      WHERE {% condition date.date_filter %} creation_time {% endcondition %}
     ;;
   }
 }
