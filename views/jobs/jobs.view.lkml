@@ -629,7 +629,7 @@ view: jobs_base {
   }
 
   measure: total_tb_billed {
-    type: number
+    type: sum
     label: "Total TB Billed"
     sql: ${total_bytes_billed} / (1000000000000) ;;
   }
