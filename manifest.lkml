@@ -2,7 +2,7 @@
 
 constant: CONNECTION {
   # Enter the name of the Looker connection to use
-  value: "looker_app_2"
+  value: ""
   export: override_optional
 }
 
@@ -38,3 +38,35 @@ constant: MAX_JOB_LOOKBACK {
   value: "8 HOUR"
   export: override_optional
 }
+
+constant: PII_QUERY_TEXT {
+  # Whether/how to expose strings/numbers that may be embedded in query text or query plans (which might sometimes contain PII)
+  # Valid values are: SHOW, or HIDE
+  # Invalid values will be treated as HIDE
+  value: "HIDE"
+  export: override_optional
+}
+
+#LAMS
+#rule: F1{} # No cross-view fields
+#rule: F2{} # No view-labeled fields
+#rule: F3{} # Count fields filtered
+#rule: E1{} # Join with subst'n operator
+#rule: E7{} # Explore label 25-char max
+#rule: T1{} # Triggers use datagroups
+#
+#rule: mft1 {
+# description: "CONNECTION: If you adapted this value for dev purposes, ensure it has the expected value to publish, \"\" (or update rule)"
+# match: "$.manifest.constant.CONNECTION.value"
+# expr_rule: (=== ::match "") ;;
+#}
+#rule: mft2 {
+# description: "REGION: If you adapted this value for dev purposes, ensure it has the expected value to publish, \"us\" (or update rule)"
+# match: "$.manifest.constant.REGION.value"
+# expr_rule: (=== ::match "us") ;;
+#}
+#rule: mft3 {
+# description: "SCOPE: If you adapted this value for dev purposes, ensure it has the expected value to publish, \"PROJECT\" (or update rule)"
+# match: "$.manifest.constant.SCOPE.value"
+# expr_rule: (=== ::match "PROJECT") ;;
+#}

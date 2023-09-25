@@ -9,6 +9,8 @@ view: jobs {
     sql:
       SELECT *
       FROM `region-@{REGION}`.INFORMATION_SCHEMA.JOBS_BY_@{SCOPE}
+      WHERE creation_time >= {% date_start date.date_filter%}
+        AND creation_time < {% date_end date.date_filter%}
     ;;
   }
 }
@@ -50,13 +52,15 @@ view: jobs_base {
     link: {
       label: "Job Lookup Dashboard"
       url: "/dashboards-next/bigquery_information_schema::job_lookup_dashboard?Job%20ID={{ value | encode_uri}}&Created={{date.date_in_filter_format | encode_uri}}"
-      icon_url: "http://www.looker.com/favicon.ico"
+      icon_url: "/favicon.ico"
     }
     link: {
       label: "View Query History in BigQuery"
       url: "https://console.cloud.google.com/bigquery?j=bq:@{REGION}:{{ value | uri_encode }}&page=queryresults"
-      icon_url: "https://www.gstatic.com/devrel-devsite/prod/vb06d4bce6b32c84cf01c36dffa546f7ea4ff7fc8fcd295737b014c1412e4d118/cloud/images/favicons/onecloud/favicon.ico"
+      icon_url: "https://cloud.google.com/favicon.ico"
     }
+    #LAMS
+    #rule_exemptions:{F1:"The performance benefit of linking to a date-filterd dashboard is significant, and we can ensure that the date view is always available to prevent errors"}
   }
 
   dimension_group: creation {
@@ -103,7 +107,7 @@ view: jobs_base {
 #     link: {
 #       label: "User Lookup Dashboard"
 #       url: "/dashboards/...?User={{ value | uri_encode }}"
-#       icon_url: "http://www.looker.com/favicon.ico"
+#       icon_url: "/favicon.ico"
 #     }
   }
 
@@ -149,13 +153,6 @@ view: jobs_base {
     type: number
     description: "Overall slot milliseconds used by the job"
     sql: ${TABLE}.total_slot_ms ;;
-  }
-
-  dimension: is_cache_hit {
-    label: "Is Cache Hit?"
-    description: "Whether the query results of this job were from a cache"
-    type: yesno
-    sql: ${TABLE}.cache_hit;;
   }
 
   # Dimension group: destination table {
@@ -237,9 +234,19 @@ view: jobs_base {
     sql: TO_JSON_STRING(${TABLE}.job_stages) ;;
   }
 
+  # Dimension group: Optimization {
+
+  dimension: is_cache_hit {
+    group_label: "Optimization"
+    label: "Is Cache Hit?"
+    description: "Whether the query results of this job were from a cache"
+    type: yesno
+    sql: ${TABLE}.cache_hit;;
+  }
+
   dimension: spill_to_disk_bytes {
     hidden: yes # Prefer measures
-    group_label: "Spill to Disk"
+    group_label: "Optimization"
     label: "Spill to Disk Bytes"
     description: "Number of bytes in the job's shuffle operations that spilled to disk, which results in slower performance"
     type: number
@@ -247,13 +254,42 @@ view: jobs_base {
   }
 
   dimension: has_spill_to_disk {
-    hidden: yes # Prefer measures
-    group_label: "Spill to Disk"
+    group_label: "Optimization"
     label: "Has Spill to Disk?"
     description: "Whether any stages in the job needed to spill shuffle operations to disk, which results in slower performance"
     type: yesno
     sql: ${spill_to_disk_bytes}>0 ;;
   }
+
+  dimension: bi_engine_mode {
+    hidden: yes # Hiding because this appears to just be a less detailed version of acceleration_mode
+    group_label: "Optimization"
+    label: "BI Engine Mode"
+    description: "e.g., ACCELERATION_MODE_UNSPECIFIED, DISABLED, PARTIAL, FULL"
+    type: string
+    sql:  ${TABLE}.bi_engine_statistics.bi_engine_mode ;;
+    suggestions: ["ACCELERATION_MODE_UNSPECIFIED", "DISABLED", "PARTIAL", "FULL"]
+  }
+  dimension: acceleration_mode {
+    group_label: "Optimization"
+    label: "BI Engine Acceleration Mode"
+    description: "e.g., ACCELERATION_MODE_UNSPECIFIED, DISABLED, PARTIAL, FULL"
+    type: string
+    sql:  ${TABLE}.bi_engine_statistics.acceleration_mode ;;
+    suggestions: ["ACCELERATION_MODE_UNSPECIFIED", "DISABLED", "PARTIAL", "FULL"]
+  }
+
+  dimension: bi_engine_reasons {
+    group_label: "Optimization"
+    label: "BI Engine Reasons"
+    description: "List of codes identifying the high-level reasons for no/partial acceleration. See https://cloud.google.com/bigquery/docs/reference/rest/v2/Job#Code"
+    type: string
+    sql: (SELECT STRING_AGG(DISTINCT code,", ") FROM UNNEST(${TABLE}.bi_engine_statistics.bi_engine_reasons)) ;;
+    suggestions: ["CODE_UNSPECIFIED","NO_RESERVATION","INSUFFICIENT_RESERVATION",
+      "UNSUPPORTED_SQL_TEXT", "INPUT_TOO_LARGE", "OTHER_REASON", "TABLE_EXCLUDED"]
+  }
+
+  # }
 
   dimension_group: start_time {
     group_label: "Start Time"
@@ -294,7 +330,6 @@ view: jobs_base {
     ]
     sql: ${TABLE}.end_time ;;
   }
-
 
   # Dimension group: Duration {
 
@@ -392,12 +427,12 @@ view: jobs_base {
 
   # }
 
-
   # Dimension group: Query Text {
 
   dimension: query_raw {
     hidden: yes
-    sql: ${TABLE}.query ;;
+    sql: {%if "@{PII_QUERY_TEXT}" == "SHOW" %} ${TABLE}.query {%
+      else %} REGEXP_REPLACE(REGEXP_REPLACE(${TABLE}.query, r"""'(\\.|[^'\\])+('|$)|"(\\.|[^"\\])+("|$)""", "[Redacted string]"), "[0-9][0-9][0-9][0-9]+", "[Redacted int]") {% endif %};;
   }
 
   dimension: query_text {
@@ -413,7 +448,7 @@ view: jobs_base {
   }
 
   dimension: query_snippet {
-    group_label: "Query Snippet"
+    group_label: "Query Text"
     description: "First 2000 characters of the SQL query text. Note: Only the PROJECT scope has the query column"
     # The Query Text field is removed from the Jobs by Organization table
     type: string
@@ -487,8 +522,7 @@ view: jobs_base {
 
 # End of dimension group: query text }
 
-
-# Dimension group: Bytes {
+  # Dimension group: Bytes {
 
   dimension: processed_bytes {
     hidden: yes # Use measures instead
@@ -637,7 +671,6 @@ view: jobs_base {
 
   # Measure group: Counts {
 
-
   measure: count {
     group_label: "Count"
 
@@ -685,6 +718,7 @@ view: jobs_base {
     drill_fields: [detail*]
   }
 
+  # }
 
   # Measure group: duration {
 
@@ -826,8 +860,6 @@ view: jobs_base {
   }
 
   # }
-
-  # End measure group duration }
 
   # Measure group: Spill to Disk {
 

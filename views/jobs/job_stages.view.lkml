@@ -6,6 +6,8 @@ view: job_stages {
     primary_key: yes
     hidden: yes
     sql: ${jobs.job_id} || "-" || CAST(${stage_id} AS STRING) ;;
+    #LAMS
+    #rule_exemptions:{F1:"Parent view references are ok/required for nested field views"}
   }
 
   dimension: stage_id {
@@ -339,13 +341,19 @@ view: job_stages {
 
   # Dimension Group: Step details {
 
+  dimension: steps_raw {
+    hidden: yes
+    sql: ${TABLE}.steps ;;
+  }
+
   dimension: steps_json {
     group_label: "Steps"
     label: "All Steps (JSON)"
     description: "tabledata.list of operations within the stage in dependency order (approximately chronological)"
     type: string
     # hidden: yes
-    sql: TO_JSON_STRING(${TABLE}.steps, true) ;;
+    sql: {%if "@{PII_QUERY_TEXT}" == "SHOW" %} TO_JSON_STRING(${TABLE}.steps, true) {% else
+      %} "Full JSON for steps is not available when PII redaction is enabled. Use `steps` dimension instead" {% endif %};;
   }
 
   dimension: steps {
@@ -356,11 +364,16 @@ view: job_stages {
     # hidden: yes
     sql: (
       SELECT STRING_AGG(
-        step.kind || ": " || TO_JSON_STRING(step.substeps)
+        step.kind || ": " || TO_JSON_STRING({%if "@{PII_QUERY_TEXT}" == "SHOW" %} step.substeps {%
+        else %}(
+          SELECT
+            ARRAY_AGG(REGEXP_REPLACE(REGEXP_REPLACE(substep, r"""'(\\.|[^'\\])+('|$)|"(\\.|[^"\\])+("|$)""", "[Redacted string]"), "[0-9][0-9][0-9][0-9]+", "[Redacted int]"))
+          FROM UNNEST(step.substeps) as substep
+        ) {% endif %} )
         , "\n"
         ORDER BY s ASC
       )
-      FROM UNNEST(${TABLE}.steps) AS step WITH OFFSET s ) ;;
+      FROM UNNEST(${steps_raw}) AS step WITH OFFSET s ) ;;
     html: <div style="white-space:pre-line">{{value}}</div> ;;
   }
 
