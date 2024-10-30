@@ -267,6 +267,16 @@
     width: 19
     height: 13
   filters:
+  - name: Project ID
+    title: Project ID
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: false
+    model: bigquery_information_schema_custom
+    explore: jobs
+    required: false
+    listens_to_filters: []
+    field: jobs.project_id_custom
   - name: Job ID
     title: Job ID
     type: field_filter
@@ -283,13 +293,4 @@
     default_value: 2021/07/26
     allow_multiple_values: false
     required: false
-  - name: Project ID
-    title: Project ID
-    type: field_filter
-    default_value: ''
-    allow_multiple_values: false
-    model: bigquery_information_schema_custom
-    explore: jobs
-    required: false
-    listens_to_filters: []
-    field: jobs.project_id
+
