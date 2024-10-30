@@ -39,7 +39,7 @@
     },
     "models": [
       {
-        "name": "bigquery_information_schema",
+        "name": "bigquery_information_schema_custom",
         "connection_constant": "CONNECTION"
       }
     ]

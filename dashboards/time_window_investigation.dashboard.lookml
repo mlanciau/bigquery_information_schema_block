@@ -12,7 +12,7 @@
     height: 2
   - title: Jobs Created by Hour
     name: Jobs Created by Hour
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_line
     fields: [date.__hour, jobs.count]
@@ -55,7 +55,7 @@
     height: 6
   - title: Join Types
     name: Join Types
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_grid
     fields: [job_stage_steps.join_type, jobs.count, job_stages.count, average_of_records_read,
@@ -126,7 +126,7 @@
     height: 6
   - title: GiB Spilled to Disk
     name: GiB Spilled to Disk
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: single_value
     fields: [jobs.total_spill_to_disk_gib, jobs.average_spill_to_disk_mib]
@@ -181,7 +181,7 @@
     height: 6
   - title: Top 5 Users
     name: Top 5 Users
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_grid
     fields: [jobs.count, jobs.total_processed_tib, jobs.average_processed_gib, jobs.average_duration,
@@ -226,7 +226,7 @@
     height: 4
   - title: Top 5 Queries
     name: Top 5 Queries
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_grid
     fields: [jobs.job_id, jobs.query_text, jobs.total_processed_gib]
@@ -268,7 +268,7 @@
     height: 16
   - title: Top 15 Tables
     name: Top 15 Tables
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_grid
     fields: [tables.table_catalog, tables.table_schema, tables.table_name, jobs.count,
@@ -313,7 +313,7 @@
     height: 8
   - title: Top 5 Projects
     name: Top 5 Projects
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_grid
     fields: [jobs.count, jobs.total_processed_tib, jobs.average_processed_gib, jobs.average_duration,

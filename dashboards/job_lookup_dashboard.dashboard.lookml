@@ -5,7 +5,7 @@
   elements:
   - title: Basic Info
     name: Basic Info
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_single_record
     fields: [jobs.query_text, date.__minute, jobs.error_result, jobs.is_cache_hit,
@@ -41,7 +41,7 @@
     height: 9
   - title: Query Text
     name: Query Text
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_grid
     fields: [jobs.query_text]
@@ -77,7 +77,7 @@
     height: 9
   - title: Referenced Tables
     name: Referenced Tables
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_grid
     fields: [job_referenced_tables.table_full_path, found, partition_column.column_name,
@@ -127,7 +127,7 @@
     height: 9
   - title: Stage Metrics
     name: Stage Metrics
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_single_record
     fields: [job_stages.count, total_max_wait, total_max_read, total_max_compute,
@@ -193,7 +193,7 @@
     height: 8
   - title: Job Stages
     name: Job Stages
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_grid
     fields: [job_stages.stage_id, job_stages.steps_collapsed, job_stages.records_read,
@@ -273,7 +273,7 @@
     default_value: ''
     allow_multiple_values: false
     required: true
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     listens_to_filters: []
     field: jobs.job_id
@@ -288,7 +288,7 @@
     type: field_filter
     default_value: ''
     allow_multiple_values: false
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     required: false
     listens_to_filters: []

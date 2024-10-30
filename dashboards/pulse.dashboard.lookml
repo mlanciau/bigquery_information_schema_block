@@ -26,7 +26,7 @@
     height: 2
   - title: Slot ms WTD
     name: Slot ms WTD
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: single_value
     fields: [date.__week, jobs.total_processed_tib, jobs.total_slot_ms, jobs.average_duration,
@@ -104,7 +104,7 @@
     height: 5
   - title: Bytes Processed WTD
     name: Bytes Processed WTD
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: single_value
     fields: [date.__week, jobs.total_processed_tib, jobs.total_slot_ms, jobs.average_duration,
@@ -180,7 +180,7 @@
     height: 5
   - title: Jobs Delayed >1s WTD
     name: Jobs Delayed >1s WTD
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: single_value
     fields: [date.__week, jobs.total_processed_tib, jobs.total_slot_ms, jobs.average_duration,
@@ -258,7 +258,7 @@
     height: 4
   - title: Current Reservations
     name: Current Reservations
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: all
     type: looker_single_record
     fields: [reservations.total_slot_capacity, capacity_commitments.total_slots, capacity_commitments.total_slots_active]
@@ -277,7 +277,7 @@
     height: 4
   - title: Query Cache Rate WTD
     name: Query Cache Rate WTD
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: single_value
     fields: [date.__week, jobs.total_processed_tib, jobs.total_slot_ms, jobs.average_duration,
@@ -356,7 +356,7 @@
     height: 4
   - title: Spills-to-Disk WTD
     name: Spills-to-Disk WTD
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: single_value
     fields: [date.__week, jobs.total_processed_tib, jobs.total_slot_ms, jobs.average_duration,
@@ -435,7 +435,7 @@
     height: 4
   - title: Average Job Start Delay
     name: Average Job Start Delay
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_line
     fields: [date.__hour, jobs.average_delay_to_start_time]
@@ -479,7 +479,7 @@
     height: 6
   - title: Slot Usage Skew
     name: Slot Usage Skew
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_line
     fields: [date.__hour, jobs.skew_slot_ms, jobs.average_slot_ms, jobs.max_slot_ms]
@@ -533,7 +533,7 @@
     height: 6
   - title: Avg Job Duration WTD
     name: Avg Job Duration WTD
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: single_value
     fields: [date.__week, jobs.total_processed_tib, jobs.total_slot_ms, jobs.average_duration,
@@ -611,7 +611,7 @@
     height: 4
   - title: Average Slot Rate by Hour
     name: Average Slot Rate by Hour
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_line
     fields: [date.__hour, jobs.total_processed_gib, jobs_dates.average_slot_rate,
@@ -707,7 +707,7 @@
     height: 5
   - title: Bytes Processed by Hour
     name: Bytes Processed by Hour
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_line
     fields: [date.__hour, jobs.total_processed_gib, jobs_dates.average_slot_rate,
@@ -789,7 +789,7 @@
     height: 5
   - title: Weekly Slot ms by Project
     name: Weekly Slot ms by Project
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_area
     fields: [jobs.project_id, jobs.total_slot_ms, date.__week]
@@ -848,7 +848,7 @@
     height: 5
   - title: Weekly Bytes Processed by Project
     name: Weekly Bytes Processed by Project
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     type: looker_area
     fields: [jobs.project_id, date.__week, jobs.total_processed_tib]
@@ -911,7 +911,7 @@
     default_value: ''
     allow_multiple_values: true
     required: false
-    model: bigquery_information_schema
+    model: bigquery_information_schema_custom
     explore: jobs
     listens_to_filters: []
     field: jobs.project_id
