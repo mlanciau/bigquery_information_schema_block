@@ -44,6 +44,10 @@ view: jobs_base {
 
   extension: required
 
+  # filter: project_id {
+  #   
+  # }
+
   dimension: job_id {
     primary_key: yes
     label: "[Job ID]"
