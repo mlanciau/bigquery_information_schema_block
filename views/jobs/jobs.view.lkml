@@ -8,7 +8,7 @@ view: jobs {
   derived_table: {
     sql:
       SELECT *
-      FROM {{ _filters['project_id_custom'] }}.`region-@{REGION}`.INFORMATION_SCHEMA.JOBS_BY_@{SCOPE}
+      FROM {% if project_id_custom._is_filtered %}{{ _filters['project_id_custom'] }}.{% endif %}`region-@{REGION}`.INFORMATION_SCHEMA.JOBS_BY_@{SCOPE}
       WHERE creation_time >= {% date_start date.date_filter%}
         AND creation_time < {% date_end date.date_filter%}
     ;;
@@ -19,7 +19,7 @@ view: jobs_in_project {
   derived_table: {
     sql:
       SELECT *
-      FROM {{ _filters['project_id_custom'] }}.`region-@{REGION}`.INFORMATION_SCHEMA.JOBS_BY_PROJECT
+      FROM {% if project_id_custom._is_filtered %}{{ _filters['project_id_custom'] }}.{% endif %}`region-@{REGION}`.INFORMATION_SCHEMA.JOBS_BY_PROJECT
       WHERE creation_time >= {% date_start date.date_filter%}
         AND creation_time < {% date_end date.date_filter%}
     ;;
@@ -31,7 +31,7 @@ view: jobs_in_organization{
   derived_table: {
     sql:
       SELECT *
-      FROM {{ _filters['project_id_custom'] }}.`region-@{REGION}`.INFORMATION_SCHEMA.JOBS_BY_ORGANIZATION
+      FROM {% if project_id_custom._is_filtered %}{{ _filters['project_id_custom'] }}.{% endif %}`region-@{REGION}`.INFORMATION_SCHEMA.JOBS_BY_ORGANIZATION
       WHERE creation_time >= {% date_start date.date_filter%}
         AND creation_time < {% date_end date.date_filter%}
     ;;
