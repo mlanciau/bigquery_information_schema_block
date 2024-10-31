@@ -7,6 +7,6 @@ To use these views, the BiqQuery connection must have the following permissions:
 
 BigQuery Reference Docs for reservation-related tables: [https://cloud.google.com/bigquery/docs/information-schema-reservations#schemas](https://cloud.google.com/bigquery/docs/information-schema-reservations#schemas)
 
-These views are primarily exposed in the [Assignments explore](/explore/bigquery_information_schema/assignments) and the [Capacity Commitments explore](/explore/bigquery_information_schema/capacity_commitments).
+These views are primarily exposed in the [Assignments explore](/explore/bigquery_information_schema_custom/assignments) and the [Capacity Commitments explore](/explore/bigquery_information_schema_custom/capacity_commitments).
 
-Reservation data is also available via the ["All" explore](/explore/bigquery_information_schema/all) for more convenient co-dimensioning with other datasets.
+Reservation data is also available via the ["All" explore](/explore/bigquery_information_schema_custom/all) for more convenient co-dimensioning with other datasets.

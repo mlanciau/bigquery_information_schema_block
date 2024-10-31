@@ -14,7 +14,7 @@ view: jobs_timeline_job {
     sql: ${jobs_timeline.sql_table_name}.job_id ;;
     link: {
       label: "Job Lookup Dashboard"
-      url: "/dashboards-next/bigquery_information_schema::job_lookup_dashboard?Job%20ID={{ value | encode_uri}}&Created={{date.date_in_filter_format | encode_uri}}"
+      url: "/dashboards-next/bigquery_information_schema_custom::job_lookup_dashboard?Job%20ID={{ value | encode_uri}}&Created={{date.date_in_filter_format | encode_uri}}"
       icon_url: "/favicon.ico"
     }
     link: {
