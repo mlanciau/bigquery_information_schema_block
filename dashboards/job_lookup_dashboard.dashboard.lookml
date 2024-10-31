@@ -35,6 +35,7 @@
     listen:
       Job ID: jobs.job_id
       Created: date.date_filter
+      Project ID: jobs.project_id_custom
     row: 0
     col: 0
     width: 5
@@ -71,6 +72,7 @@
     listen:
       Job ID: jobs.job_id
       Created: date.date_filter
+      Project ID: jobs.project_id_custom
     row: 0
     col: 5
     width: 8
@@ -121,6 +123,7 @@
     listen:
       Job ID: jobs.job_id
       Created: date.date_filter
+      Project ID: jobs.project_id_custom
     row: 0
     col: 13
     width: 11
@@ -187,6 +190,7 @@
     listen:
       Job ID: jobs.job_id
       Created: date.date_filter
+      Project ID: jobs.project_id_custom
     row: 9
     col: 0
     width: 5
@@ -262,6 +266,7 @@
     listen:
       Job ID: jobs.job_id
       Created: date.date_filter
+      Project ID: jobs.project_id_custom
     row: 9
     col: 5
     width: 19
